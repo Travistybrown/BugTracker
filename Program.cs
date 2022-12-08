@@ -27,6 +27,7 @@ builder.Services.AddScoped<ITicketService , TicketService>();
 builder.Services.AddScoped<IBTRolesService, BTRoleService>();
 builder.Services.AddScoped<IBTProjectService, BTProjectService>();
 builder.Services.AddScoped<IBTTicketHistoryService, BTTicketHistoryService>();
+builder.Services.AddScoped<IBTCompanyService, BTCompanyService>();
 builder.Services.AddMvc();
 
 var app = builder.Build();
