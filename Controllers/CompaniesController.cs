@@ -92,6 +92,8 @@ namespace BugTracker.Controllers
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel model)
         {
             // Get the company Id
