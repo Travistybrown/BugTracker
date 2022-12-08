@@ -1,0 +1,125 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+@using BugTracker.Services.Interfaces
+
+@inject IBTProjectService projectService
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>All Projects</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Project Manager
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFileType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Archived)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectPriority)
+            </th>
+            <th>
+                <h3>Project Manager</h3>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @{
+                        BTUser? projectManager = await projectService.GetProjectManagerAsync(item.Id);
+                    }
+                    @if (projectManager is null && User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-sm btn-outline-info" asp-action="AssignPM" asp-route-projectId="@item.Id">Assign Pm</a>
+                    }
+                    else
+                    {
+                        <text>@(projectManager?.FullName ?? "Unassigned")</text>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageFileData)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImageFileType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Archived)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
+                </td>
+                <td>
+                    @((await projectService.GetProjectManagerAsync(item.Id))?.FullName)
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-Id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-Id="@item.Id">Details</a> |
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <span>|</span>
+                        if (item.Archived == false)
+                        {
+                            <a asp-action="Archive" asp-route-Id="@item.Id">Archive</a>
+                        }else{
+                            <a asp-action="Restore" asp-route-Id="@item.Id">Restore</a>
+                        }
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

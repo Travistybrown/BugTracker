@@ -1,0 +1,64 @@
+﻿@model BugTracker.Models.TicketComment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TicketComment</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ticket)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ticket.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+        @*@foreach(TicketComment ticketComment in Model.Comment){
+            <div class="comment-inner">
+                <h6 class="commenter">
+                    <a class="hover-flip-item-wrapper" href="#">
+                        <span class="hover-flip-item">
+                            <span data-text="@Model.User?.FullName">@Model.User?.FullName</span>
+                        </span>
+                    </a>
+                </h6>
+                <div class="comment-meta">
+                    <div class="time-spent">@ticketComment.Created.ToString("MM dd, yyyy AT hh:mm tt")</div>
+                    <div class="reply-edit">
+                  
+                    </div>
+                </div>
+                <div class="comment-text">
+                    <p class="b2">
+                        @Html.Raw(ticketComment.Comment)
+                    </p>
+                </div>
+            </div>
+        }*@
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
