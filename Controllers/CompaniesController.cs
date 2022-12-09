@@ -94,19 +94,19 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel model)
+        public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel viewmodel)
         {
             // Get the company Id
             int companyId = User.Identity!.GetCompanyId();
 
             // Instantiate the BTUser
-            BTUser? btUser = (await _companyService.GetMembersAsync(companyId)).FirstOrDefault(m => m.Id == model.BTUser!.Id);
+            BTUser? btUser = (await _companyService.GetMembersAsync(companyId)).FirstOrDefault(m => m.Id == viewmodel.BTUser!.Id);
 
             // Get Role for the User
             IEnumerable<string> currentRoles = await _rolesService.GetUserRolesAsync(btUser!);
 
             // Get Selected Role(s) for the User
-            string? selectedRole = model.SelectedRoles!.FirstOrDefault();
+            string? selectedRole = viewmodel.SelectedRoles!.FirstOrDefault();
 
             // Remove current role(s) and Add new role
             if (!string.IsNullOrEmpty(selectedRole))

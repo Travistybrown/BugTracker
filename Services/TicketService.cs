@@ -86,7 +86,7 @@ namespace BugTracker.Services
             }
         }
 
-
+      
 
         public async Task<List<Ticket>> GetAllTicketsByCompanyIdAsync(int companyId)
         {
@@ -146,7 +146,7 @@ namespace BugTracker.Services
         {
             try
             {
-                return await _context.Tickets
+                Ticket? ticket = await _context.Tickets
                                               .Include(t => t.DeveloperUser)
                                                  .Include(t => t.SubmitterUser)
                                                  .Include(t => t.Project)
@@ -154,9 +154,12 @@ namespace BugTracker.Services
                                                  .Include(t => t.TicketStatus)
                                                  .Include(t => t.TicketType)
                                                  .Include(t => t.Comments)
+                                                 .ThenInclude(t => t.User)
                                                  .Include(t => t.Attachments)
                                                  .Include(t => t.History)
-                                                 .FirstOrDefaultAsync(t => t.Id == ticketId && t.Project!.CompanyId == companyId && t.Archived == false)!;
+                                                 .FirstOrDefaultAsync(t => t.Id == ticketId && t.Project!.CompanyId == companyId )!;
+
+                return ticket ?? new Ticket();
             }
             catch (Exception)
             {
@@ -221,7 +224,7 @@ namespace BugTracker.Services
             }
         }
 
-
+     
 
         public Task RestoreTicketAsync(Ticket ticket)
         {

@@ -226,17 +226,17 @@ namespace BugTracker.Controllers
 
 
 
-            BTUser btUser = await _userManager.GetUserAsync(User);
             ModelState.Remove("SubmitterUserId");
 
 
 
             if (ModelState.IsValid)
             {
+                string userId = _userManager.GetUserId(User);
                 // Created date
                 ticket.Created = DateTime.UtcNow;
                 //submitteruserid
-                ticket.SubmitterUserId = btUser.Id;
+                ticket.SubmitterUserId = userId;
 
                 ticket.TicketStatusId = (await _context.TicketStatuses.FirstOrDefaultAsync(t => t.Name == nameof(BTTicketStatuses.New)))!.Id;
 
@@ -244,14 +244,16 @@ namespace BugTracker.Controllers
 
                 // call the ticket service
                 await _ticketService.AddTicketAsync(ticket);
-                int companyId = User.Identity.GetCompanyId();
+
 
 
                 //Add History Record
-                Ticket newTicket = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id, ticket.Project.CompanyId);
 
 
-                await _historyService.AddHistoryAsync(null!, newTicket, btUser.Id);
+                int companyId = User.Identity.GetCompanyId();
+                Ticket newTicket = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id, companyId);
+
+                await _historyService.AddHistoryAsync(null!, newTicket, userId);
 
 
 
@@ -281,7 +283,7 @@ namespace BugTracker.Controllers
             int companyId = (await _userManager.GetUserAsync(User)).CompanyId;
 
             // call the ticket service
-            var ticket = await _ticketService.GetTicketByIdAsync(id.Value, companyId);
+            Ticket ticket = await _ticketService.GetTicketByIdAsync(id.Value, companyId);
 
             BTUser user = await _userManager.GetUserAsync(User);
 
@@ -479,7 +481,7 @@ namespace BugTracker.Controllers
 
 
                 ticket.Archived = false;
-                await _ticketService.UpdateTicketAsync(ticket); ;
+                await _ticketService.UpdateTicketAsync(ticket); 
 
 
 

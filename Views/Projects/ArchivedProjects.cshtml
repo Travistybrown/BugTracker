@@ -6,8 +6,118 @@
 
 <h1>Archived Projects</h1>
 
+<div class="row layout-spacing">
+    <div class="col-lg-12">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-content widget-content-area">
+                <table id="style-1" class="table style-1 dt-table-hover non-hover">
+                    <thead>
+                        <tr>
+                            <th style="word-wrap: break-word; white-space: normal;"> @Html.DisplayNameFor(model => model.Name) </th>
+                            <th> @Html.DisplayNameFor(model => model.Description)</th>
+                            <th>  @Html.DisplayNameFor(model => model.Created)</th>
+                            <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                            <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                            <th class="">@Html.DisplayNameFor(model => model.ImageFileData)</th>
+                            <th class="text-center dt-no-sorting"> @Html.DisplayNameFor(model => model.ImageFileType)</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Archived)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Company)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ProjectPriority)
+                            </th>
 
-<table class="table">
+                            <th>
+                                Edit
+                            </th>
+
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+
+                        <tbody>
+                            <tr>
+                                <td style="word-wrap: break-word; white-space: normal; col-1;">
+                                    @item.Name
+                                </td>
+
+                                <td style="word-wrap: break-word; white-space: normal;">
+                                    @item.Description
+                                </td>
+
+                                <td style="word-wrap: break-word; white-space: normal;">
+                                    @item.Created
+                                </td>
+
+                                <td style="word-wrap: break-word; white-space: normal;">
+                                    @item.StartDate
+                                </td>
+
+
+                                <td style="word-wrap: break-word; white-space: normal; checkbox">
+                                    @item.EndDate
+                                </td>
+
+                                <td style="word-wrap: break-word; white-space: normal;">
+                                    @item.ImageFileData
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ImageFileType)
+                                </td>
+                                <td style="word-wrap: break-word; white-space: normal;">
+                                    @item.Archived
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Company.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
+                                </td>
+
+
+
+
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle; p-3" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" p>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                            <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <span>|</span>
+                                                if (item.Archived == false)
+                                                {
+                                                    <a class="dropdown-item" asp-action="Archive" asp-route-id="@item.Id">Archive</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="dropdown-item" asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -96,3 +206,4 @@
         }
     </tbody>
 </table>
+*@

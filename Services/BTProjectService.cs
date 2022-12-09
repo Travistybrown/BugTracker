@@ -242,11 +242,24 @@ namespace BugTracker.Services
         {
             try
             {
-                Project? project = await _context.Projects.Include(p => p.Members).FirstOrDefaultAsync(p => p.Id == projectId);
+                Project? project = await _context.Projects
+                                                  .Include(p => p.Tickets)
+                                                    .ThenInclude(t => t.TicketPriority)
+                                                .Include(p => p.Tickets)
+                                                    .ThenInclude(t => t.TicketStatus)
+                                                .Include(p => p.Tickets)
+                                                    .ThenInclude(t => t.TicketType)
+                                                .Include(p => p.Tickets)
+                                                    .ThenInclude(t => t.DeveloperUser)
+                                                .Include(p => p.Tickets)
+                                                    .ThenInclude(t => t.Attachments)
+                                                .Include(p => p.Members)
+                                                .Include(p => p.ProjectPriority)
+                                                .FirstOrDefaultAsync(p => p.Id == projectId);
 
-                foreach (BTUser member in project!.Members)
+                foreach (BTUser member in project.Members)
                 {
-                    if (await _rolesService.IsUserInRoleAsync(member, nameof(BTRoles.ProjectManager)))
+                    if (await _rolesService.IsUserInRoleAsync(member, nameof(BTRoles.ProjectManager).ToString()))
                     {
                         return member;
                     }
@@ -343,6 +356,29 @@ namespace BugTracker.Services
             }
         }
 
+        public async Task<bool> IsUserOnProjectAsync(string userId, int projectId)
+        {
+            try
+            {
+                Project? project = await _context.Projects.Include(p => p.Members).FirstOrDefaultAsync(p => p.Id == projectId);
+
+                bool result = false;
+
+                if (project != null)
+                {
+                    result = project.Members.Any(m => m.Id == userId);
+                }
+
+                return result;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public async Task<bool> RemoveMemberFromProjectAsync(BTUser member, int projectId, int companyId)
         {
             try
@@ -367,9 +403,52 @@ namespace BugTracker.Services
 
         }
 
-        public Task RemoveProjectManagerAsync(int projectId)
+        public async Task RemoveProjectManagerAsync(int projectId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Project? project = await _context.Projects
+                                                .Include(p => p.Members)
+                                                .FirstOrDefaultAsync(p => p.Id == projectId);
+                foreach (BTUser member in project?.Members)
+                {
+                    if (await _rolesService.IsUserInRoleAsync(member, BTRoles.ProjectManager.ToString()))
+                    {
+                        await RemoveUserFromProjectAsync(member.Id, projectId);
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task RemoveUserFromProjectAsync(string userId, int projectId)
+        {
+            try
+            {
+                BTUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                Project? project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+
+                try
+                {
+                    if (await IsUserOnProjectAsync(userId, projectId))
+                    {
+                        project!.Members.Remove(user);
+                        await _context.SaveChangesAsync();
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"**** ERROR **** - Error Removing User from project.  --->  {ex.Message}");
+            }
         }
 
         public async Task RestoreProjectAsync(Project project)

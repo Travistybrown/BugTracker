@@ -10,7 +10,7 @@ namespace BugTracker.Models
         public int Id { get; set; }
 
         [Required]
-        [DisplayName("Comnpany Name")]
+        [DisplayName("Company Name")]
         public string? Name { get; set; }
 
         [DisplayName("Company Description")]
