@@ -122,7 +122,51 @@ namespace BugTracker.Controllers
             return RedirectToAction(nameof(Details), new { id = viewModel.Project?.Id });
         }
 
+        // Get
+        [Authorize(Roles = "Admin,ProjectManager")]
+        public async Task<IActionResult> AssignProjectMembers(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            int companyId = User.Identity!.GetCompanyId();
+            ProjectMembersViewModel model = new();
+            model.Project = await _projectService.GetProjectByIdAsync(id.Value, companyId);
+            List<string> currentMembers = model.Project.Members.Select(m => m.Id).ToList();
+            // TODO: Add BTCompanyService service method to get all company Developers and Submiters  ?? ??
+            List<BTUser> submitters = await _btRolesService.GetUsersInRoleAsync(nameof(BTRoles.Submitter), companyId);   //??why did this fix??
+            List<BTUser> developers = await _btRolesService.GetUsersInRoleAsync(nameof(BTRoles.Developer), companyId);   //Leaving this for meeting with Antonio
+            List<BTUser> userList = submitters.Concat(developers).ToList();
+            //
+            model.UsersList = new MultiSelectList(userList, "Id", "FullName", currentMembers);
+            return View(model);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignProjectMembers(ProjectMembersViewModel model)
+        {
+            int companyId = User.Identity!.GetCompanyId();
+            if (model.SelectedMembers != null)
+            {
+                // Remove current project members  !! DO NOT REMOVE THE PM !!
+                await _projectService.RemoveCurrentMembersAsync(model.Project!.Id, companyId);
+                // Add newly selected members
+                await _projectService.AddMembersToProjectAsync(model.SelectedMembers, model.Project.Id);
+                return RedirectToAction(nameof(Details), new { id = model.Project!.Id });
+            }
+            // Else, reset the form
+            model.Project = await _projectService.GetProjectByIdAsync(model.Project!.Id, companyId);
+            List<string> currentMembers = model.Project.Members.Select(m => m.Id).ToList();
+            // TODO: Add BTCompanyService service method to get all company Developers and Submiters  ?? ??
+            List<BTUser> submitters = await _btRolesService.GetUsersInRoleAsync(nameof(BTRoles.Submitter), companyId);
+            List<BTUser> developers = await _btRolesService.GetUsersInRoleAsync(nameof(BTRoles.Developer), companyId);
+            List<BTUser> userList = submitters.Concat(developers).ToList();
+            //
+            model.UsersList = new MultiSelectList(userList, "Id", "FullName", currentMembers);
+            return View(model);
+        }
         // GET: Useers Projects
 
         public async Task<IActionResult> MyProjects()

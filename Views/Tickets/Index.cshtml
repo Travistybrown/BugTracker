@@ -26,9 +26,7 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.TicketType)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.TicketStatus)
-                            </th>
+
                             <th>
                                 @Html.DisplayNameFor(model => model.DeveloperUser)
                             </th>
@@ -75,14 +73,12 @@
                                     @item.TicketType.Name
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+                                    @item.TicketStatus.Name
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.DeveloperUser.FullName)
                                 </td>
-                                <td>
-
-                                </td>
+                               
                                 
                          
                                 <td class="text-center">

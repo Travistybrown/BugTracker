@@ -17,8 +17,8 @@
                             <th> @Html.DisplayNameFor(model => model.Description)</th>
                             <th>  @Html.DisplayNameFor(model => model.Created)</th>
                             <th>@Html.DisplayNameFor(model => model.Updated)</th>
-                            <th>@Html.DisplayNameFor(model => model.Archived)</th>
-                            <th class="">@Html.DisplayNameFor(model => model.ArchivedByProject)</th>
+                           
+                           
                             <th class="text-center dt-no-sorting"> @Html.DisplayNameFor(model => model.Project)</th>
                             <th>
                                 @Html.DisplayNameFor(model => model.TicketPriority)
@@ -61,11 +61,9 @@
                                 <td style="word-wrap: break-word; white-space: normal;">
                                     @item.Updated
                                 </td>
-                                 <td>@Html.DisplayNameFor(model => item.Archived)</td>
+                              
 
-<td style="word-wrap: break-word; white-space: normal; checkbox">
-    @item.ArchivedByProject
-</td>
+
 
 <td style="word-wrap: break-word; white-space: normal;">
     @item.Project.Description
@@ -86,8 +84,7 @@
     @item.SubmitterUser.FullName
 </td>
 
-<td>
-</td>
+
 
 <td class="text-center">
     <div class="dropdown">

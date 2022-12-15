@@ -1,5 +1,6 @@
 ﻿@model BugTracker.Models.Project
 @using BugTracker.Enums
+@using BugTracker.Models.Enums
 @using BugTracker.Services.Interfaces
 @using Microsoft.AspNetCore.Identity
 
@@ -7,6 +8,7 @@
 @inject IBTProjectService projectService
 @inject IBTTicketHistoryService ticketHistory
 @inject UserManager<BTUser> UserManager
+@inject IFileService _FileService
 
 
 
@@ -72,8 +74,8 @@
                             <li>Deadline: <span class="">@Model.EndDate</span></li>
                             <li>Priority: <span class="">@Model.ProjectPriority</span></li>
                             
-                            @* if() logic *@
-                            [Project Active/Inactive]
+                          
+                           
                         </ul>
                     </div>
                 </div>
@@ -87,8 +89,35 @@
                         <hr />
                     </div>
                     <div class="body" style="overflow-y:auto;height:300px;">
-                        [Project Manager]
-                        @* if() logic for Avatar/Default etc *@
+                       
+                        @if (projectManager != null)
+                        {
+                            <div>
+                                
+                                <div>
+                                    <h5>@projectManager.FullName</h5>
+                                    <span>@projectManager.Email</span>
+                                    <p class="text-muted m-b-0">Project Manager</p>
+                                    @if (User.IsInRole(nameof(BTRoles.Admin)) || (btUser.Id == projectManager.Id))
+                                    {
+                                        <a class="btn btn-xs alert-primary" style="font:small" asp-action="AssignProjectMembers" asp-controller="Projects" asp-route-id="@Model.Id">Manage Team</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <img class="rounded-circle" style="width:60px;height:60px;" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="">
+                                <div class="wid-u-info">
+                                    <h5 class="text-muted m-b-0">Not Assigned</h5>
+                                    @if (User.IsInRole(nameof(BTRoles.Admin)))
+                                    {
+                                        <span><a asp-action="AssignPM" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-xs btn-outline-info">Assign PM</a></span>
+                                    }
+                                </div>
+                            </div>
+                        }
                        
                     </div>
                 </div>

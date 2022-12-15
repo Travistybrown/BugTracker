@@ -23,6 +23,22 @@ namespace BugTracker.Services
             _rolesService = rolesService;
         }
 
+        public async Task AddMembersToProjectAsync(IEnumerable<string> userIds, int projectId)
+        {
+            try
+            {
+                foreach (string userId in userIds)
+                {
+                    BTUser? btUser = _context.Users.Find(userId);
+                    await AddMemberToProjectAsync(btUser!, projectId);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> AddMemberToProjectAsync(BTUser member, int projectId)
         {
             try
@@ -375,6 +391,25 @@ namespace BugTracker.Services
             catch (Exception)
             {
 
+                throw;
+            }
+        }
+
+        public async Task RemoveCurrentMembersAsync(int projectId, int companyId)
+        {
+            try
+            {
+                Project? project = await GetProjectByIdAsync(projectId, companyId);
+                foreach (var member in project.Members)
+                {
+                    if (!await _rolesService.IsUserInRoleAsync(member, nameof(BTRoles.ProjectManager)))
+                    {
+                        project.Members.Remove(member);
+                    }
+                }
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

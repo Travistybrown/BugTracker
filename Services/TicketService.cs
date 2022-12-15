@@ -86,7 +86,24 @@ namespace BugTracker.Services
             }
         }
 
-      
+        public async Task AssignTicketAsync(int ticketId, string userId)
+        {
+            try
+            {
+                BTUser? btUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                Ticket? ticket = await GetTicketByIdAsync(ticketId, btUser!.CompanyId);
+                if (ticket != null)
+                {
+                    ticket!.DeveloperUserId = userId;
+                    // TODO: Set ticket Status to "Development" with LookupService
+                    await UpdateTicketAsync(ticket);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public async Task<List<Ticket>> GetAllTicketsByCompanyIdAsync(int companyId)
         {

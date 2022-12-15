@@ -8,6 +8,7 @@ namespace BugTracker.Services.Interfaces
         public Task<List<Project>> GetAllProjectsByCompanyIdAsync(int companyId);
         public Task<bool> AddProjectManagerAsync(string userId, int projectId, int comapnyId);
         public Task<bool> AddMemberToProjectAsync(BTUser member, int projectId);
+        public Task AddMembersToProjectAsync(IEnumerable<string> userIds, int projectId);
         public Task<List<Project>> GetArchivedProjectsByCompanyIdAsync(int companyId);
         public Task AddProjectAsync(Project project);
         public Task<Project> GetProjectByIdAsync(int projectId, int companyId);
@@ -17,6 +18,7 @@ namespace BugTracker.Services.Interfaces
         public Task UpdateProjectAsync(Project project);
         public Task<bool> IsUserOnProjectAsync(string userId, int projectId);
         public Task ArchiveProjectAsync(Project project);
+        public Task RemoveCurrentMembersAsync(int projectId, int companyId);
         public Task RemoveProjectManagerAsync(int projectId);
         public Task RemoveUserFromProjectAsync(string userId, int projectId);
         public Task<bool> RemoveMemberFromProjectAsync(BTUser member, int projectId, int companyId);

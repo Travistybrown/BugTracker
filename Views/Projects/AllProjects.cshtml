@@ -27,8 +27,7 @@
                             </th>
                             <th>@Html.DisplayNameFor(model => model.StartDate)</th>
                             <th>@Html.DisplayNameFor(model => model.EndDate)</th>
-                            <th class="">@Html.DisplayNameFor(model => model.ImageFileData)</th>
-                            <th class="text-center dt-no-sorting"> @Html.DisplayNameFor(model => model.ImageFileType)</th>
+                     
                             <th>
                                 @Html.DisplayNameFor(model => model.Archived)
                             </th>
@@ -82,16 +81,10 @@
                                 <td style="word-wrap: break-word; white-space: normal; checkbox">
                                     @item.EndDate
                                 </td>
-
-                                <td style="word-wrap: break-word; white-space: normal;">
-                                    @item.ImageFileData
-                                </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ImageFileType)
-                                </td>
-                                <td style="word-wrap: break-word; white-space: normal;">
                                     @item.Archived
                                 </td>
+                          
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Company.Name)
                                 </td>

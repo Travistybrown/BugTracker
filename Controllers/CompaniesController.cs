@@ -33,7 +33,27 @@ namespace BugTracker.Controllers
             _rolesService = rolesService;
             _userManager = userManager;
         }
+        // GET: Companies/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
 
+        // POST: Companies/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Company company)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(company);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(company);
+        }
         // GET: Companies
         public async Task<IActionResult> Index()
         {

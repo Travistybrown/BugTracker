@@ -18,14 +18,10 @@
                         <tr>
                             <th style="word-wrap: break-word; white-space: normal;"> @Html.DisplayNameFor(model => model.Name) </th>
                             <th> @Html.DisplayNameFor(model => model.Description)</th>
-                            <th>  @Html.DisplayNameFor(model => model.ImageFileData)</th>
-                           
-                            <th>@Html.DisplayNameFor(model => model.ImageFileType)</th>
+                 
                            
 
-                            <th>
-                                Edit
-                            </th>
+                          
 
                         </tr>
                     </thead>
@@ -42,13 +38,7 @@
                                     @item.Description
                                 </td>
 
-                                <td style="word-wrap: break-word; white-space: normal;">
-                                    @item.ImageFileData
-                                </td>
-                                
-                                <td style="word-wrap: break-word; white-space: normal;">
-                                    @item.ImageFileType
-                                </td>
+                            
 
 
                                
@@ -56,19 +46,7 @@
 
 
 
-                                <td class="text-center">
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle; p-3" href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" p>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                        </a>
-
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                            <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                            <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                            
-                                        </div>
-                                    </div>
-                                </td>
+                                
                             </tr>
 
 
