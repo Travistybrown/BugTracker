@@ -249,7 +249,7 @@ namespace BugTracker.Controllers
             }
 
             ViewData["TicketPriorityId"] = new SelectList(_context.TicketPriorities, "Id", "Name");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Description");
+            ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
             ViewData["TicketTypeId"] = new SelectList(_context.TicketTypes, "Id", "Name");
             return View();
 
