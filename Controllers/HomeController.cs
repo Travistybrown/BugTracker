@@ -21,6 +21,7 @@ namespace BugTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTCompanyService _companyService;
         private readonly IBTRolesService _rolesService;
+        private readonly SignInManager<BTUser> _signInManager;
 
         public HomeController(ILogger<HomeController> logger,
                               UserManager<BTUser> userManager,
@@ -28,7 +29,8 @@ namespace BugTracker.Controllers
                               ITicketService ticketService,
                               ApplicationDbContext context,
                               IBTCompanyService bTCompanyService,
-                              IBTRolesService rolesService)
+                              IBTRolesService rolesService,
+                              SignInManager<BTUser> signInManager)
         {
             _logger = logger;
             _userManager = userManager;
@@ -37,6 +39,7 @@ namespace BugTracker.Controllers
             _context = context;
             _companyService = bTCompanyService;
             _rolesService = rolesService;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -110,6 +113,8 @@ namespace BugTracker.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
+            if (!_signInManager.IsSignedIn(User)) return RedirectToAction(nameof(Index));
+            
             DashboardViewModel model = new();
 
             int companyId = User.Identity!.GetCompanyId();
