@@ -52,7 +52,25 @@
         <section>
             <h3>Use another service to log in.</h3>
             <hr />
-            @{
+            <section>
+            <h3>Or use the Demo Account to Login! </h3>
+            <hr />
+
+            <div class="mb-1 text-center">
+                <form class="" id="account" method="post">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-8 btn-block">
+                                <button type="submit" style="width:inherit;height:min-content" class="btn btn-primary p-10 m-2" name="demoEmail" value="DemoAdminEmail">Demo Admin</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+           @* @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
@@ -75,7 +93,7 @@
                         </div>
                     </form>
                 }
-            }
+            }*@
         </section>
     </div>
 </div>

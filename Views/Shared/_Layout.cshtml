@@ -51,11 +51,19 @@
             <ul class="navbar-item theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo">
                     <a asp-controller="Home" asp-action="Index">
-                        <img src="/Cork/assets/img/t logo 200x200.png" >
+                        <img src="/Cork/assets/img/t logo 200x200.png">
                     </a>
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> Bug Tracker </a>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <a asp-controller="Home" asp-action="Dashboard"> Bug Tracker </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Home" asp-action="Index"> Bug Tracker </a>
+                    }
+
                 </li>
             </ul>
 
@@ -74,16 +82,16 @@
 
 
 
-              
 
-                
 
-            
 
-                        <partial name="_LoginPartial" />
-                    
 
-                
+
+
+                <partial name="_LoginPartial" />
+
+
+
             </ul>
         </header>
     </div>
@@ -118,7 +126,7 @@
                 </div>
 
 
-                
+
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <ul class="list-unstyled menu-categories" id="accordionExample">
